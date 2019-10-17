@@ -7,9 +7,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <!-- 别名配置 -->
  <typeAliases>
     <!-- todo -->
-   <package name="com.zhuzhiguang.senior1.week2.entity"/>
+   <package name="com.zhaoyiheng.cms.entity"/>
    <!-- todo -->
-  <!--  <package name="com.bobo.shop.vo"/> -->
+   <package name="com.zhaoyiheng.cms.vo"/>
  </typeAliases>
  
  
