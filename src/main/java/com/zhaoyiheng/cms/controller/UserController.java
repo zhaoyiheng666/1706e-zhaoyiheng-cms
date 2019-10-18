@@ -16,6 +16,12 @@ import com.zhaoyiheng.cms.comon.ConstClass;
 import com.zhaoyiheng.cms.entity.User;
 import com.zhaoyiheng.cms.service.UserService;
 
+/**
+ * 
+ * @author zhaoyiheng
+ *
+ */
+
 @Controller
 @RequestMapping("user")
 public class UserController {
@@ -24,10 +30,7 @@ public class UserController {
 	UserService userService;
 	
 	
-	
 	@GetMapping("register")  // 只接受get的请求
-    //@PostMapping// 只能接受post方法的请求
-	//@RequestMapping(value = "register",method=RequestMethod.GET)
 	public String register() {
 		return "user/register";
 	}
@@ -48,7 +51,7 @@ public class UserController {
 		return !userService.checkUserExist(username);
 	}
 	
-	@PostMapping("register")  // 只接受POst的请求\
+	@PostMapping("register")  // 只接受POST的请求\
 	public String register(HttpServletRequest request,
 			@Validated User user,
 			BindingResult errorResult) {
@@ -80,7 +83,7 @@ public class UserController {
 		return "user/login";
 	}
 	
-	@PostMapping("login")  // 只接受POst的请求
+	@PostMapping("login")  // 只接受post的请求
 	public String login(HttpServletRequest request,
 			@Validated User user,
 			BindingResult errorResult) {
@@ -95,9 +98,12 @@ public class UserController {
 			request.setAttribute("errorMsg", "用户名密码错误");
 			return "user/login";
 		}else {
+//			用户信息保存在session当中
 			request.getSession().setAttribute(ConstClass.SESSION_USER_KEY, loginUser);
+//			普通注册用户
 			if(loginUser.getRole()==ConstClass.USER_ROLE_GENERAL) {
 				return "redirect:home";	
+//			管理员用户
 			}else if(loginUser.getRole()==ConstClass.USER_ROLE_ADMIN){
 				return "redirect:../admin/index";	
 			}else {
@@ -108,7 +114,14 @@ public class UserController {
 		
 	}
 	
-	
-	
+	/**
+	 * 登陆后进入个人中心（普通注册用户）
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("home")
+	public String home(HttpServletRequest request){
+		return "my/home";
+	}
 
 }
