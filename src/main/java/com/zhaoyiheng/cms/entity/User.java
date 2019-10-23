@@ -1,14 +1,16 @@
 package com.zhaoyiheng.cms.entity;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 
- * @author zhuzg
+ * @author zhaoyiheng
  *
  */
 public class User {
@@ -26,7 +28,9 @@ public class User {
 	private Date birthday            ;
 	private int gender              ;
 	private int locked              ;
+	@DateTimeFormat(pattern=("yyyy-MM-dd"))
 	private Date create_time         ;
+	@DateTimeFormat(pattern=("yyyy-MM-dd"))
 	private Date update_time         ;
 	private String url                 ;
 	private int score               ;
@@ -73,14 +77,16 @@ public class User {
 	public void setLocked(int locked) {
 		this.locked = locked;
 	}
-	public Date getCreate_time() {
-		return create_time;
+	public String getCreate_time() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(create_time);
 	}
 	public void setCreate_time(Date create_time) {
 		this.create_time = create_time;
 	}
-	public Date getUpdate_time() {
-		return update_time;
+	public String getUpdate_time() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return sdf.format(update_time);
 	}
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;

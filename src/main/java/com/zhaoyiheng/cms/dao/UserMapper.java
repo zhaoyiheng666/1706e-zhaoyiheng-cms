@@ -1,7 +1,10 @@
 package com.zhaoyiheng.cms.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.zhaoyiheng.cms.entity.User;
 
@@ -11,6 +14,8 @@ import com.zhaoyiheng.cms.entity.User;
  *
  */
 public interface UserMapper {
+
+	
 	/**
 	 * 添加用户
 	 * @param user
@@ -21,12 +26,29 @@ public interface UserMapper {
 	int add(User user);
 	
 	/**
-	 * 根据用户名查账
+	 * 根据用户名查找
 	 * @param username
 	 * @return
 	 */
-	@Select("SELECT id,username,password FROM cms_user where username=#{value} limit 1")
+	@Select("SELECT id,username,password,role,locked FROM cms_user "
+			+ "WHERE username=#{value} limit 1")
 	User findByName(String username);
+
+	/**
+	 * 管理员查询用户列表
+	 * @param locked
+	 * @return
+	 */
+	@Select("select id,username,create_time,locked from cms_user where role=0")
+	List<User> UserList(Integer locked);
+
+	/**
+	 * 管理员封禁用户
+	 * @param id
+	 * @return
+	 */
+	@Update("update cms_user set locked=1 where id=#{id}")
+	int bannedUser(Integer id);
 	
 
 }
