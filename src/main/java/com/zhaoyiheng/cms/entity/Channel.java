@@ -2,12 +2,17 @@ package com.zhaoyiheng.cms.entity;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author zhaoyiheng
+ *
+ */
 public class Channel implements Serializable {
 	
 	
 	
 	/**
-	 *  zhaoyiheng
+	 * 
 	 */
 	private static final long serialVersionUID = 1130146385295694815L;
 

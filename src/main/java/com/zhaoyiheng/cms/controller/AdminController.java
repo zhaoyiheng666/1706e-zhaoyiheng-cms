@@ -1,5 +1,7 @@
 package com.zhaoyiheng.cms.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,16 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
+import com.zhaoyiheng.cms.service.LinkService;
+import com.zhaoyiheng.cms.entity.Link;
 import com.zhaoyiheng.cms.comon.ConstClass;
 import com.zhaoyiheng.cms.comon.ResultMsg;
 import com.zhaoyiheng.cms.entity.Article;
 import com.zhaoyiheng.cms.entity.User;
 import com.zhaoyiheng.cms.service.ArticleService;
 import com.zhaoyiheng.cms.web.PageUtils;
+import com.zhaoyiheng.utils.StringUtils;
 
 @Controller
 @RequestMapping("admin")
@@ -25,17 +31,64 @@ public class AdminController {
 	@Autowired
 	ArticleService articelService;
 	
+	@Autowired
+	private LinkService linkService;
+	
 	@RequestMapping("index")
 	public String index() {
 		return "admin/index";
 	}
 	
+	//获取友情链接
+	@RequestMapping("linklist")
+	public String list(HttpServletRequest request) {
+		//获取友情连接
+		List<Link> linklist = linkService.linklist();
+		request.setAttribute("linklist", linklist);
+		return "admin/article/link";
+	}
+		
+	//友情连接添加
+		
+	@RequestMapping(value="addlink",method=RequestMethod.GET)
+	public String add(HttpServletRequest request) {
+		return "admin/addlink";
+	}
+	
+	@RequestMapping(value="addlink",method=RequestMethod.POST)
+	@ResponseBody
+	public  ResultMsg add(HttpServletRequest request,Link link) {
+			
+		if(!StringUtils.isUrl(link.getHttp())) {
+			return new ResultMsg(2, "url格式不正确，请仔细校验一下格式再来啊", "");
+		}
+			
+		int result =linkService.addlink(link);
+		if(result>0) {
+			return new ResultMsg(1, "添加成功", "");
+		}else {
+			return new ResultMsg(2, "添加失败，请与管理员联系", "");
+		}
+		
+	}
+		
+	//友情链接的删除
+	@ResponseBody
+	@RequestMapping("deletelink")
+	public boolean deletelink(Integer id ) {
+		int i =linkService.deletelink(id);
+		return i>0;
+	}
+		
+		//管理员文章管理和分页
 	@RequestMapping("manArticle")
 	public String adminArticle(HttpServletRequest request,
 			@RequestParam(defaultValue="1") Integer page
 			,@RequestParam(defaultValue="0") Integer status
 			) {
 			
+		 //request.getRequestDispatcher("").forward(request, response);
+		
 		  PageInfo<Article> pageInfo= articelService.getAdminArticles(page,status);
 		  request.setAttribute("pageInfo", pageInfo);
 		  request.setAttribute("status", status);
@@ -121,4 +174,5 @@ public class AdminController {
 		}
 	}
 	
+
 }

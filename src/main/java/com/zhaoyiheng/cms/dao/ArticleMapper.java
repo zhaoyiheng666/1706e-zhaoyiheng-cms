@@ -2,11 +2,16 @@ package com.zhaoyiheng.cms.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.github.pagehelper.PageInfo;
 import com.zhaoyiheng.cms.entity.Article;
+import com.zhaoyiheng.cms.entity.Comment;
+import com.zhaoyiheng.cms.entity.Tag;
 
 /**
  * 文章管理
@@ -100,5 +105,69 @@ public interface ArticleMapper {
 	@Update("UPDATE cms_article set hot=#{status},updated=now() "
 			+ " WHERE id=#{articleId}")
 	int updateHot(@Param("articleId") Integer articleId, @Param("status") int status);
+
+	/**
+	 * 根据标签名称获取标签对象
+	 * @param tag
+	 * @return
+	 */
+	@Select("SELECT * FROM cms_term where display_name=#{value} limit 1")
+	Tag findTagByName(String tag);
+
+	
+	/**
+	 * 增加Tag实体备案
+	 * @param tagBean
+	 * @return
+	 */
+	int addTag(Tag display_name);
+
+	/**
+	 * 增加数据到文章标签中间表
+	 * @param articleId 
+	 * @param tagId  
+	 */
+	@Insert("INSERT INTO cms_article_term values(#{articleId},#{tagId}) ")
+	void addArticleTag(@Param("articleId") Integer articleId, @Param("tagId") Integer tagId);
+
+	/**
+	 *  删除中间表
+	 * @param articleId
+	 */
+	@Delete(" DELETE FROM cms_article_term WHERE aid=#{value}")
+	int delTagsByArticleId(Integer articleId);
+
+	@Insert("INSERT INTO cms_comment(userId,articleId,content,created) "
+			+ "VALUES(#{userId},#{articleId},#{content},now() )")
+	void addComment(Comment comment);
+	
+	@Update(" UPDATE cms_article SET commentCnt=commentCnt+1 WHERE id=#{value}")
+	void increaseCommentCnt(Integer articleId);
+	
+	@Select("SELECT c.*,u.username as userName FROM cms_comment c LEFT JOIN cms_user u ON u.id=c.userId "
+			+ " WHERE c.articleId=#{value} ORDER BY id desc")
+	List<Comment> getCommnentByArticleId(Integer articleId);
+
+	/**
+	 * 根据主题id获取文章列表
+	 * @param id
+	 * @return
+	 */
+	@Select("SELECT a.id,a.title,a.created FROM cms_special_article  "
+			+ " sa JOIN cms_article  a ON sa.aid=a.id "
+			+ " WHERE sa.sid=#{value}")
+	List<Article> findBySepecailId(Integer id);
+
+	@Select("SELECT count(1) FROM cms_special_article  "
+			+ " sa JOIN cms_article  a ON sa.aid=a.id "
+			+ " WHERE sa.sid=#{value}")
+	Integer getArticleNum(Integer id);
+	
+	/**
+	 * 我的评论列表
+	 * @param integer 
+	 * @return
+	 */
+	List<Comment> clist(Integer integer);
 	
 }

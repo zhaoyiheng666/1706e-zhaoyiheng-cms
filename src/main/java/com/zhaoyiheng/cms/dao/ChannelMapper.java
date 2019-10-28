@@ -6,7 +6,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Select;
 
 import com.zhaoyiheng.cms.entity.Channel;
-
+/**
+ * 
+ * @author zhaoyiheng
+ *
+ */
 public interface ChannelMapper {
 
 	/**

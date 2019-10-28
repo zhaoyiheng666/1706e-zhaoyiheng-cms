@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *  用户前后端交互数据的结构体
- * @author zhuzg
+ * @author zhaoyiheng
  *
  */
 public class ResultMsg  implements Serializable{

@@ -7,7 +7,11 @@ import org.apache.ibatis.annotations.Select;
 
 import com.zhaoyiheng.cms.entity.Cat;
 import com.zhaoyiheng.cms.entity.Channel;
-
+/**
+ * 
+ * @author zhaoyiheng
+ *
+ */
 @Mapper
 public interface CatMapper {
 

@@ -2,6 +2,9 @@ package com.zhaoyiheng.cms.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import com.zhaoyiheng.cms.comon.ArticleType;
 
 public class Article implements Serializable {
 	
@@ -13,7 +16,17 @@ public class Article implements Serializable {
 	//文章主键id
 	private Integer id;
 	//标题
+	
+	
+	
 	private String title;
+	
+	public String getTags() {
+		return tags;
+	}
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
 	//文章内容
 	private String content;
 	//图片
@@ -25,7 +38,25 @@ public class Article implements Serializable {
 	private Integer categoryId;
 	private Cat cat;
 	
+	private List<ImageBean> imgList;
 	
+	
+	public List<ImageBean> getImgList() {
+		return imgList;
+	}
+	public void setImgList(List<ImageBean> imgList) {
+		this.imgList = imgList;
+	}
+	private ArticleType articleType=ArticleType.HTML;
+	
+	
+	
+	public ArticleType getArticleType() {
+		return articleType;
+	}
+	public void setArticleType(ArticleType articleType) {
+		this.articleType = articleType;
+	}
 	public Channel getChannel() {
 		return channel;
 	}
@@ -61,6 +92,9 @@ public class Article implements Serializable {
 	private Date updated;
 	//评论数量
 	private Integer commentCnt;
+	
+	// 标签 用逗号分隔
+	private String tags;
 	
 	public User getUser() {
 		return user;
@@ -154,15 +188,16 @@ public class Article implements Serializable {
 		return commentCnt;
 	}
 	public void setCommentCnt(Integer commentCnt) {
+		
 		this.commentCnt = commentCnt;
 	}
 	@Override
 	public String toString() {
 		return "Article [id=" + id + ", title=" + title + ", content=" + content + ", picture=" + picture
 				+ ", channelId=" + channelId + ", channel=" + channel + ", categoryId=" + categoryId + ", cat=" + cat
-				+ ", userId=" + userId + ", hits=" + hits + ", hot=" + hot + ", status=" + status + ", deleted="
-				+ deleted + ", created=" + created + ", updated=" + updated + ", commentCnt=" + commentCnt + ", user="
-				+ user + "]";
+				+ ", articleType=" + articleType + ", userId=" + userId + ", hits=" + hits + ", hot=" + hot
+				+ ", status=" + status + ", deleted=" + deleted + ", created=" + created + ", updated=" + updated
+				+ ", commentCnt=" + commentCnt + ", tags=" + tags + ", user=" + user + "]";
 	}
 	@Override
 	public int hashCode() {

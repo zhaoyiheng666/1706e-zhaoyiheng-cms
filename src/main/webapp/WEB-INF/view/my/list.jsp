@@ -28,6 +28,7 @@ function del(id) {
 		if(data){
 			alert('删除成功')	
 			$('#center').load("/user/myarticlelist");
+			
 		}else{
 			alert('删除失败')
 		}

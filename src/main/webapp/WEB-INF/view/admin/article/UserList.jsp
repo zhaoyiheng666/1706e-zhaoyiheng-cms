@@ -34,12 +34,19 @@
 	</table>
 </body>
 <script type="text/javascript">
+	//封禁用户
 	function banned(id){
-		location="/user/bannedUser?id="+id;
+		var result = confirm("您确定要封禁该用户么？");
+		if(!result)
+			return;
+			location="/user/bannedUser?id="+id;
 	}
-	
+	//解封用户
 	function noBanned(id){
-		
+		if(confirm("您确定要解封该用户么？")){ 
+			
+		}
+		location="/user/noBannedUser?id="+id;
 	}
 </script>
 </html>

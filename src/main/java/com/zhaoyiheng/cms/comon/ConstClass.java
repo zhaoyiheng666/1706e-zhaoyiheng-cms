@@ -2,7 +2,7 @@ package com.zhaoyiheng.cms.comon;
 
 /**
  * 常量类
- * @author zhuzg
+ * @author zhaoyiheng
  *
  */
 public class ConstClass {

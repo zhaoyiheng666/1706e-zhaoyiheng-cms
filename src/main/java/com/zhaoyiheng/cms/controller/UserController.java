@@ -1,6 +1,11 @@
 package com.zhaoyiheng.cms.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.zhaoyiheng.cms.comon.ConstClass;
@@ -106,7 +112,7 @@ public class UserController {
 		if(loginUser==null) {
 			request.setAttribute("errorMsg", "用户名密码错误");
 			return "user/login";
-		}else if(loginUser.getLocked() == 0){
+		}else {
 			//用户信息保存在session当中
 			request.getSession().setAttribute(ConstClass.SESSION_USER_KEY, loginUser);
 			//普通注册用户
@@ -119,10 +125,8 @@ public class UserController {
 				// 其他情况
 				return "user/login";
 			}
-		}else {
-			request.setAttribute("errorMsg", "您的账号已被冻结！");
-			return "user/login";
 		}
+		
 	}
 	
 	
@@ -188,4 +192,66 @@ public class UserController {
 		return "admin/index";
 	}
 	
+	/**
+	 * 解封用户
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("noBannedUser")
+	public String noBannedUser(Integer id){
+		int noBanned = userService.noBannedUser(id);
+		return "admin/index";
+	}
+	
+	/**
+	 * 跳转到上传页面
+	 */
+	@GetMapping("toAddhead_picture")
+	public String toAddhead_picture() {
+		return "my/addhead_picture";
+	}
+	
+	@PostMapping("addhead_picture")
+	public String addHead_picture(HttpServletRequest request,MultipartFile file) throws IllegalStateException, IOException {
+		User user = (User)request.getSession().getAttribute("SESSION_USER_KEY");
+		System.out.println("112323423121233");
+		System.out.println("user----------"+user);
+		processFile(file,user);
+		
+		 userService.addHead_picture(user);
+		return "redirect:home";
+		
+	}
+	
+	/**
+	 * 处理接收到的文件
+	 */
+	
+	private void processFile(MultipartFile file,User user) throws IllegalStateException, IOException {
+
+
+		// 原来的文件名称
+		System.out.println("file.isEmpty() :" + file.isEmpty()  );
+		System.out.println("file.name :" + file.getOriginalFilename());
+		
+		if(file.isEmpty()||"".equals(file.getOriginalFilename()) || file.getOriginalFilename().lastIndexOf('.')<0 ) {
+			user.setHead_picture("");
+			return;
+		}
+			
+		String originName = file.getOriginalFilename();
+		String suffixName = originName.substring(originName.lastIndexOf('.'));
+		SimpleDateFormat sdf=  new SimpleDateFormat("yyyyMMdd");
+		String path = "d:/pic/" + sdf.format(new Date());
+		File pathFile = new File(path);
+		if(!pathFile.exists()) {
+			pathFile.mkdir();
+		}
+		String destFileName = 		path + "/" +  UUID.randomUUID().toString() + suffixName;
+		File distFile = new File( destFileName);
+		file.transferTo(distFile);//文件另存到这个目录下边
+		user.setHead_picture(destFileName.substring(7));
+		
+	}
+
 }

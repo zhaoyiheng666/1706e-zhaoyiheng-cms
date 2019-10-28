@@ -69,16 +69,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	/**
-	 * 管理员查询用户列表
-	 */
-	@Override
-	public List<User> UserList(Integer locked) {
-		// TODO Auto-generated method stub
-		return userMapper.UserList(locked);
-	}
-
-	/**
-	 * 管理员封禁用户
+	 * 封禁用户
 	 */
 	@Override
 	public int bannedUser(Integer id) {
@@ -86,4 +77,24 @@ public class UserServiceImpl implements UserService {
 		return userMapper.bannedUser(id);
 	}
 
+	/**
+	 * 解封用户
+	 */
+	@Override
+	public int noBannedUser(Integer id) {
+		// TODO Auto-generated method stub
+		return userMapper.noBannedUser(id);
+	}
+
+	@Override
+	public List<User> UserList(Integer locked) {
+		// TODO Auto-generated method stub
+		return userMapper.UserList(locked);
+	}
+
+	@Override
+	public int addHead_picture(User user) {
+		// TODO Auto-generated method stub
+		return userMapper.addHead_picture(user);
+	}
 }

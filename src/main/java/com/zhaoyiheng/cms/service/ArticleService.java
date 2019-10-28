@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.pagehelper.PageInfo;
 import com.zhaoyiheng.cms.entity.Article;
+import com.zhaoyiheng.cms.entity.Comment;
 
 
 public interface ArticleService {
@@ -86,4 +87,22 @@ public interface ArticleService {
 	 * @return
 	 */
 	int updateHot(Integer articleId, int status);
+
+	/**
+	 * 发表文章评论
+	 * @param id
+	 * @param articleId
+	 * @param content
+	 */
+	void comment(Integer id, Integer articleId, String content);
+	
+	PageInfo<Comment> getCommentByArticleId(Integer articleId,Integer page);
+	
+	/**
+	 * 我的评论列表
+	 * @param integer 
+	 * @return
+	 */
+	List<Comment> clist(Integer integer);
+
 }
